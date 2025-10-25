@@ -31,7 +31,7 @@ function fetchDailyStockPrices() {
   const tickers = ["AAPL", "META", "GOOGL"];
   const row = sheet.getLastRow() + 1;
 
-  // ✅ A列に「Date型」で現在時刻を記録！
+  // ✅ A列に「Date型」で現在時刻を記録
   sheet.getRange(row, 1).setValue(now);
 
   tickers.forEach((ticker, i) => {
