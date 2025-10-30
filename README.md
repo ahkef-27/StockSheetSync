@@ -1,4 +1,4 @@
-## 📈 株価管理ツール（Google Sheets × Apps Script）
+## 📈 株価管理ツール（Google スプレッドシート × Apps Script）
 
 Google Apps Script と Google スプレッドシートを活用した、米国株価の自動取得・可視化ツールです。 ユーザーの手を煩わせることなく、リアルタイム株価の取得・変動率の色分け・日別＆週別のグラフ生成を自動で行います。
 
