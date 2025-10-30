@@ -2,8 +2,8 @@ function fetchDailyStockPrices() {
   const now = new Date();
   const hourJST = Utilities.formatDate(now, "Asia/Tokyo", "HH");
 
-  // 米国市場の時間帯（日本時間で23〜5時）
-  const allowedHours = ["23", "00", "01", "02", "03", "04", "05"];
+  //米国市場の時間帯（日本時間で22〜5時）
+  const allowedHours = ["22","23", "00", "01", "02", "03", "04", "05"];
   if (!allowedHours.includes(hourJST)) {
   Logger.log("米国市場の時間外なのでスキップします");
     return;
@@ -31,7 +31,7 @@ function fetchDailyStockPrices() {
   const tickers = ["AAPL", "META", "GOOGL"];
   const row = sheet.getLastRow() + 1;
 
-  // ✅ A列に「Date型」で現在時刻を記録
+  // ✅ A列に「Date型」で現在時刻を記録！
   sheet.getRange(row, 1).setValue(now);
 
   tickers.forEach((ticker, i) => {
