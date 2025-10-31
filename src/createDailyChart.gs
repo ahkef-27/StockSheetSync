@@ -34,7 +34,9 @@ function createDailyChart(sheet) {
       format: "HH:mm:ss",
       textStyle: { fontSize: 10 },
       slantedText: true,
-      slantedTextAngle: 45
+      slantedTextAngle: 45,
+      showTextEvery: 1, // ← 30分ごとのラベルをすべて表示
+      gridlines: { count: 12 } // ← 最大12本の目盛り（6時間分）
     });
 
     chartBuilder.setOption("vAxis", {
@@ -46,7 +48,7 @@ function createDailyChart(sheet) {
   });
 
     const dataLength = prices.length;
-    const rowOffset = Math.max(dataLength + 2, 8); // 最低8行確保
+    const rowOffset = 8;
     chartBuilder.setPosition(1 + i * rowOffset, 6, 0, 0)
 
     sheet.insertChart(chartBuilder.build());
