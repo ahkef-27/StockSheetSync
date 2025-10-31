@@ -9,7 +9,7 @@ function fetchDailyStockPrices() {
     return;
   }
 
-  const today = Utilities.formatDate(now, "Asia/Tokyo", "yyyy/MM/dd");
+  const today = Utilities.formatDate(now, "Asia/Tokyo", "yyyy-MM-dd");
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("本日株価");
 
@@ -20,7 +20,7 @@ function fetchDailyStockPrices() {
   }
 
   const lastDate = sheet.getRange(2, 1).getValue();
-  const lastDateStr = Utilities.formatDate(new Date(lastDate), "Asia/Tokyo", "yyyy/MM/dd");
+  const lastDateStr = Utilities.formatDate(new Date(lastDate), "Asia/Tokyo", "yyyy-MM-dd");
 
   // 日付が変わっていたら前日のデータを削除（行数チェック付き）
   const dataRowCount = sheet.getLastRow() - 1;
@@ -31,7 +31,7 @@ function fetchDailyStockPrices() {
   const tickers = ["AAPL", "META", "GOOGL"];
   const row = sheet.getLastRow() + 1;
 
-  // ✅ A列に「Date型」で現在時刻を記録！
+  // ✅ A列に「Date型」で現在時刻を記録
   sheet.getRange(row, 1).setValue(now);
 
   tickers.forEach((ticker, i) => {
