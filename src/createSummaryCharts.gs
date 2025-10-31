@@ -3,7 +3,7 @@ function createSummaryCharts() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const tempSheet = ss.insertSheet("tempData");
   const summarySheetName = "株価グラフ";
-  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd");
+  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd");
   const props = PropertiesService.getScriptProperties();
   const lastCreatedDate = props.getProperty("lastChartDate");
 
@@ -14,11 +14,11 @@ function createSummaryCharts() {
   }
 
   // ✅ 本日分のグラフがすでに作成されていたらスキップ
-  if (lastCreatedDate === today) {
-    Logger.log("本日のグラフはすでに作成済みです");
-    ss.deleteSheet(tempSheet);
-    return;
-  }
+  //if (lastCreatedDate === today) {
+    //Logger.log("本日のグラフはすでに作成済みです");
+    //ss.deleteSheet(tempSheet);
+    //return;
+  //}
 
   let summarySheet = ss.getSheetByName(summarySheetName);
 
@@ -31,7 +31,7 @@ function createSummaryCharts() {
     }
 
     const todayExists = dateValues.some(date => {
-      const formatted = Utilities.formatDate(new Date(date), "Asia/Tokyo", "yyyy/MM/dd");
+      const formatted = Utilities.formatDate(new Date(date), "Asia/Tokyo", "yyyy-MM-dd");
       return formatted === today;
     });
 
@@ -63,8 +63,8 @@ function createSummaryCharts() {
   const tickers = ["AAPL", "META", "GOOGL"];
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000);
-  const startDate = Utilities.formatDate(sevenDaysAgo, "Asia/Tokyo", "yyyy/MM/dd");
-  const endDate = Utilities.formatDate(now, "Asia/Tokyo", "yyyy/MM/dd");
+  const startDate = Utilities.formatDate(sevenDaysAgo, "Asia/Tokyo", "yyyy-MM-dd");
+  const endDate = Utilities.formatDate(now, "Asia/Tokyo", "yyyy-MM-dd");
 
   let dates = [];
   let priceMap = {};
@@ -87,7 +87,7 @@ function createSummaryCharts() {
       dates = rows.map(row => [row[0]]);
       summarySheet.getRange(1, 1).setValue("日付");
       summarySheet.getRange(2, 1, dates.length).setValues(dates);
-      summarySheet.getRange(2, 1, dates.length).setNumberFormat("yyyy/MM/dd");
+      summarySheet.getRange(2, 1, dates.length).setNumberFormat("yyyy-MM-dd");
     }
 
     const prices = rows.map(row => [row[1]]);
