@@ -1,7 +1,7 @@
 function insertTodayDateToAllSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheets = ss.getSheets();
-  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd");
+  const today = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd");
 
   sheets.forEach(sheet => {
     sheet.getRange("A1").setValue(today);
