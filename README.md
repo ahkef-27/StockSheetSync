@@ -28,10 +28,12 @@ Google Apps Script と Google スプレッドシートを活用した、米国�
 
 ## 📷 スクリーンショット（例）
 
-    ※ここにスプレッドシートのスクリーンショットやグラフの画像を挿入すると効果的！
 ![本日株価シート](Images/Sheet01.png)
+
 ![日グラフの例](Images/Sheet02.png)
+
 ![週次の例](Images/Sheet03.png)
+
 ![週次グラフの例](Images/Sheet04.png)
 
 ---
