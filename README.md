@@ -12,6 +12,10 @@ Google スプレッドシート × Apps Script による、米国株価の自動
 
 AAPL / META / GOOGL の株価を30分ごとに記録し、日次・週次グラフを自動生成します。
 
+現在、このスプレッドシートで、ツールの動きを試しています。 
+
+https://docs.google.com/spreadsheets/d/1EK1zL5p-PEuFRml_fOhKIDMu2qOFJ0JgYKYVibOOoa8/edit?gid=793241765#gid=793241765
+
 ---
 
 ### 🛠 使用技術
