@@ -111,10 +111,10 @@ StockSheetSync は、Google Apps Script のトリガーを利用して
 リアルタイム（30分おき）＋日次（1日1回） の2段構成で動作します。
 
 ### 🔁 使用するトリガー
-### 関数名	タイミング	役割
-### fetchDailyStockPrices	30分おき	株価の取得・記録（AAPL / META / GOOGL）
-### createDailyChart	30分おき	当日の株価推移グラフを自動更新
-### createSummaryCharts	1日1回（例：22:00）	過去7日間の株価データを集計し、週次グラフを生成
+### 関数名	                タイミング	        役割
+### fetchDailyStockPrices	30分おき	                株価の取得・記録（AAPL / META / GOOGL）
+### createDailyChart	        30分おき	                当日の株価推移グラフを自動更新
+### createSummaryCharts	        1日1回（例：22:00）	過去7日間の株価データを集計し、週次グラフを生成
 
 ※ createSummaryCharts は ScriptProperties により、同日に再実行されないよう制御されています。
 
