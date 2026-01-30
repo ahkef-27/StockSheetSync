@@ -54,19 +54,60 @@ SpreadsheetApp.ChartBuilder API 　日別・週次の株価推移グラフを自
 
 ### 🧭 システムの流れ
 
-このツールでは、Google スプレッドシート上で株価データが自動的に蓄積・可視化されます。
-Apple、Meta、Google の株価が時間ごとに記録され、右側には各銘柄の株価推移が折れ線グラフとして表示されます。
+StockSheetSync は、Google Apps Script のトリガーを利用して
+リアルタイム（30分おき）＋日次（1日1回） の2段構成で動作します。
+🔁 使用するトリガー
+関数名	タイミング	役割
+fetchDailyStockPrices	30分おき	株価の取得・記録
+createDailyChart	30分おき	当日の株価推移グラフを更新
+createSummaryCharts	1日1回（例：22:00）	過去7日間の週次グラフを生成
 
-📈 StockSheetSync – 自動株価記録・可視化ツール
+※ createSummaryCharts は ScriptProperties により 同日に再実行されない よう制御されています。
 
-StockSheetSync は、Google スプレッドシート上で
-米国主要3銘柄（Apple・Meta・Google）の株価データを自動取得・可視化するシステムです。
+🧭 システムの流れ（完全版）
 
-トリガーを設定することで、以下の2種類の処理が自動で実行されます。
+以下は、StockSheetSync がどのようにデータを取得し、
+どのタイミングでグラフを生成するかを示した全体フローです。
+1. リアルタイム処理（30分おきトリガー）
+① fetchDailyStockPrices() — 株価の取得と記録
 
-🕒 日次処理（createDailyChart） – 1日単位の株価推移を記録・可視化
+    AAPL / META / GOOGL の株価を取得
 
-📆 週次処理（createSummaryCharts） – 過去7日間の株価データを集計・グラフ化
+    「本日株価」シートに追記
+
+    取得失敗時はグレー表示
+
+    5%、10%の変動に応じてセル色分け
+
+    米国市場の取引時間（22時〜5時）に合わせて動作
+
+② createDailyChart() — 当日の株価推移グラフを更新
+
+    「本日株価」シートのデータをもとに
+    当日の折れ線グラフを自動更新
+
+2. 日次処理（1日1回トリガー）
+③ createSummaryCharts() — 過去7日間の週次グラフを生成
+
+    「株価グラフ」シートを削除して再生成
+
+    GOOGLEFINANCE を使って過去7日分の株価を取得
+
+    変動率に応じた色付け
+
+    7日間の折れ線グラフを自動生成
+
+    実行日は ScriptProperties に保存し、同日に再実行されないよう制御
+
+    temp シートを作成 → データ取得 → 削除まで自動処理
+
+3. 日付が変わったときの動作
+
+    「本日株価」シートは翌日分としてリセット
+
+    createSummaryCharts() が新しい週次グラフを生成
+
+    30分おきのリアルタイム更新がそのまま継続
 
 ---
 
