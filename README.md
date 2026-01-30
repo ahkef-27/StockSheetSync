@@ -1,4 +1,4 @@
-## 📈 株価管理ツール（Google スプレッドシート × Apps Script）
+# 📈 株価管理ツール（Google スプレッドシート × Apps Script）
 
 ### Google Apps Script と Google スプレッドシートを活用し、
 ### 米国株（AAPL / META / GOOGL）の株価を自動取得・自動可視化するツールです。
