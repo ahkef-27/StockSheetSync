@@ -5,7 +5,7 @@ function colorizePricesHorizontal(sheet, row) {
     const cell = sheet.getRange(row, col);
     const value = cell.getValue();
 
-    let color = "#ffffff"; // デフォルトは白
+    let color = "#ffffff";
 
     if (typeof value === "number") {
       const prevCell = sheet.getRange(row - 1, col);
@@ -14,13 +14,13 @@ function colorizePricesHorizontal(sheet, row) {
       if (typeof prevValue === "number") {
         const changeRate = (value - prevValue) / prevValue;
 
-        if (changeRate >= 0.10) color = "#bbdefb"; // +10%以上 → 青
-        else if (changeRate >= 0.05) color = "#c8e6c9"; // +5%以上 → 緑
-        else if (changeRate <= -0.10) color = "#ffcdd2"; // -10%以上 → 赤
-        else if (changeRate <= -0.05) color = "#fff9c4"; // -5%以上 → 黄
+        if (changeRate >= 0.10) color = "#bbdefb";
+        else if (changeRate >= 0.05) color = "#c8e6c9";
+        else if (changeRate <= -0.10) color = "#ffcdd2";
+        else if (changeRate <= -0.05) color = "#fff9c4";
       }
     } else {
-      color = "#eeeeee"; // 取得失敗
+      color = "#eeeeee";
     }
 
     cell.setBackground(color);
