@@ -8,7 +8,6 @@ function getPrice(ticker) {
   }
 
   calcSheet.getRange("A1").clearContent();
-
   calcSheet.getRange("A1").setFormula(`=GOOGLEFINANCE("${ticker}", "price")`);
   SpreadsheetApp.flush();
 
