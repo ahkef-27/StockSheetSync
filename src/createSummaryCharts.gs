@@ -1,5 +1,4 @@
 function createSummaryCharts() {
-
   // 並列実行防止（最重要）
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(30000)) {
