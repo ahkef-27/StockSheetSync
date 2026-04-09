@@ -1,4 +1,5 @@
 function createDailyChart() {
+
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("本日株価");
 
