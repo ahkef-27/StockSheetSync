@@ -6,5 +6,4 @@ function insertTodayDateToAllSheets() {
   sheets.forEach(sheet => {
     sheet.getRange("A1").setValue(today);
   });
-
 }
