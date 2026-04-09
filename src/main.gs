@@ -23,77 +23,65 @@ function fetchDailyStockPrices() {
     (hour < 5) || 
     (hour === 5 && minute < 30);
 
-  if (!isNightTime) {
-    return;
-  }
+  if (!isNightTime) return;
 
-  // 株価取得処理
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("本日株価");
-
   if (!sheet) {
-    sheet = ss.insertSheet("本日株価");
-    sheet.getRange(1, 1, 1, 4).setValues([
-      ["時刻", "AAPL", "MSFT", "GOOGL"]
-    ]);
+    resetDailySheet();
+    sheet = ss.getSheetByName("本日株価");
   }
 
   const symbols = ["AAPL", "MSFT", "GOOGL"];
   const row = [now];
 
+  // 他の関数をいじらないよう、名前をそのまま維持して呼び出す
   symbols.forEach(symbol => {
-    let price = getPriceWithRetryYahoo(symbol);
+    let price = getPriceWithRetry(symbol); // ★名前をスッキリ
     row.push(price);
   });
 
   sheet.appendRow(row);
 }
 
-function getPriceWithRetryYahoo(symbol) {
-  let price = getPriceFromYahoo(symbol);
+/**
+ * リトライ処理（名前からYahooを外しました）
+ */
+function getPriceWithRetry(symbol) {
+  let price = getPriceFromGoogle(symbol); 
   if (price !== null) return price;
 
-  Utilities.sleep(2000);
-  return getPriceFromYahoo(symbol);
+  Utilities.sleep(2000); // 2秒待機
+  return getPriceFromGoogle(symbol);
 }
 
-function getPriceFromYahoo(symbol) {
+/**
+ * GoogleFinanceから価格取得（名前を実態に合わせました）
+ */
+function getPriceFromGoogle(symbol) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const tempSheet = ss.getSheetByName("本日株価"); // 既存のシートを利用
+  const sheet = ss.getSheetByName("本日株価");
+  const tempCell = sheet.getRange("Z1"); 
   
-  // セルに一時的に式を書き込んで値を取得
-  const tempCell = tempSheet.getRange("Z1"); // 邪魔にならない遠いセル
   tempCell.setFormula(`=GOOGLEFINANCE("${symbol}", "price")`);
-  
-  // スプレッドシートの計算が終わるまで少し待機
   SpreadsheetApp.flush();
+  
   const price = tempCell.getValue();
+  tempCell.clearContent(); // clear()より少し軽量
   
-  // 使用したセルをクリア
-  tempCell.clear();
-  
-  // 取得した値が数値であれば返し、エラー（#N/Aなど）ならnullを返す
-  if (price && typeof price === 'number') {
-    return price;
-  } else {
-    Logger.log("価格取得失敗: " + symbol);
-    return null;
-  }
+  return (typeof price === 'number') ? price : null;
 }
 
 function resetDailySheet() { 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("本日株価"); 
 
-  // deleteSheet() を使わず軽量化
   if (!sheet) {
     sheet = ss.insertSheet("本日株価");
   } else {
-    sheet.clearContents();
-    sheet.clearFormats();
+    sheet.clear(); 
   }
 
-  // ヘッダー再設定
   sheet.getRange(1, 1, 1, 4).setValues([
     ["時刻", "AAPL", "MSFT", "GOOGL"]
   ]);
