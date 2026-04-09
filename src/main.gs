@@ -58,7 +58,6 @@ function getPriceWithRetryYahoo(symbol) {
 }
 
 function getPriceFromYahoo(symbol) {
-  // Yahoo APIの代わりに、一時的な計算用セルを使ってGOOGLEFINANCE関数から価格を取得
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const tempSheet = ss.getSheetByName("本日株価"); // 既存のシートを利用
   
