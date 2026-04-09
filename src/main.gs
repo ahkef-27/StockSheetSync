@@ -58,14 +58,26 @@ function getPriceWithRetryYahoo(symbol) {
 }
 
 function getPriceFromYahoo(symbol) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
-  const response = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
-  const json = JSON.parse(response.getContentText());
-
-  try {
-    return json.chart.result[0].meta.regularMarketPrice;
-  } catch (e) {
-    Logger.log("Yahoo価格取得失敗: " + symbol);
+  // Yahoo APIの代わりに、一時的な計算用セルを使ってGOOGLEFINANCE関数から価格を取得
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const tempSheet = ss.getSheetByName("本日株価"); // 既存のシートを利用
+  
+  // セルに一時的に式を書き込んで値を取得
+  const tempCell = tempSheet.getRange("Z1"); // 邪魔にならない遠いセル
+  tempCell.setFormula(`=GOOGLEFINANCE("${symbol}", "price")`);
+  
+  // スプレッドシートの計算が終わるまで少し待機
+  SpreadsheetApp.flush();
+  const price = tempCell.getValue();
+  
+  // 使用したセルをクリア
+  tempCell.clear();
+  
+  // 取得した値が数値であれば返し、エラー（#N/Aなど）ならnullを返す
+  if (price && typeof price === 'number') {
+    return price;
+  } else {
+    Logger.log("価格取得失敗: " + symbol);
     return null;
   }
 }
