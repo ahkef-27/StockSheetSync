@@ -9,6 +9,7 @@ function styleHeaderRows() {
     // 最低でも1行1列を確保
     const lastRow = Math.max(sheet.getLastRow(), 1);
     const lastCol = Math.max(sheet.getLastColumn(), 1);
+
     // フォントサイズを13に統一（空でも安全）
     sheet.getRange(1, 1, lastRow, lastCol).setFontSize(13);
 
