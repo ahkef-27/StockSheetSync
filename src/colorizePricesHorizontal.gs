@@ -26,3 +26,4 @@ function colorizePricesHorizontal(sheet, row) {
     cell.setBackground(color);
   });
 }
+
