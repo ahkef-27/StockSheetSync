@@ -7,3 +7,4 @@ function insertTodayDateToAllSheets() {
     sheet.getRange("A1").setValue(today);
   });
 }
+
