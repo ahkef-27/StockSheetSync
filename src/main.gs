@@ -45,7 +45,7 @@ function fetchDailyStockPrices() {
 }
 
 /**
- * リトライ処理（名前からYahooを外しました）
+ * リトライ処理（名前からYahooを外した）
  */
 function getPriceWithRetry(symbol) {
   let price = getPriceFromGoogle(symbol); 
@@ -56,7 +56,7 @@ function getPriceWithRetry(symbol) {
 }
 
 /**
- * GoogleFinanceから価格取得（名前を実態に合わせました）
+ * GoogleFinanceから価格取得（名前を実態に合わせた）
  */
 function getPriceFromGoogle(symbol) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
