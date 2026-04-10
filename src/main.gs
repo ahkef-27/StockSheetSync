@@ -27,6 +27,7 @@ function fetchDailyStockPrices() {
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("本日株価");
+
   if (!sheet) {
     resetDailySheet();
     sheet = ss.getSheetByName("本日株価");
@@ -37,7 +38,7 @@ function fetchDailyStockPrices() {
 
   // 他の関数をいじらないよう、名前をそのまま維持して呼び出す
   symbols.forEach(symbol => {
-    let price = getPriceWithRetry(symbol); // ★名前をスッキリ
+    let price = getPriceWithRetry(symbol);
     row.push(price);
   });
 
