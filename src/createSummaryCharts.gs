@@ -144,3 +144,4 @@ function createSummaryCharts() {
     lock.releaseLock();
   }
 }
+
