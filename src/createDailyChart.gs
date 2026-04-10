@@ -66,3 +66,4 @@ function createDailyChart() {
     sheet.insertChart(chartBuilder.build());
   });
 }
+
