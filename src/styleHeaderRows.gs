@@ -19,3 +19,4 @@ function styleHeaderRows() {
          .setVerticalAlignment("middle");
   });
 }
+
