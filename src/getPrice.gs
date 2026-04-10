@@ -27,3 +27,4 @@ function getPrice(ticker) {
 
   return price;
 }
+
