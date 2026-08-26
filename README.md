@@ -59,7 +59,7 @@ https://docs.google.com/spreadsheets/d/1EK1zL5p-PEuFRml_fOhKIDMu2qOFJ0JgYKYVibOO
 
 #### ユーザー操作のインターフェース
 
-### GOOGLE FINANCE 関数
+### GOOGLEFINANCE 関数
 
 #### 過去7日間の株価データ取得（週次グラフ用）
 
