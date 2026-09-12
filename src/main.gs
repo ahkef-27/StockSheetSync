@@ -40,4 +40,7 @@ function fetchDailyStockPrices() {
   
   const row = [now, ...prices];
   sheet.appendRow(row);
+
+  createDailyChart();
+  styleHeaderRows();
 }
