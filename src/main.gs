@@ -41,6 +41,8 @@ function fetchDailyStockPrices() {
   const row = [now, ...prices];
   sheet.appendRow(row);
 
+  const lastRow = sheet.getLastRow();
+  colorizePricesHorizontal(sheet, lastRow);
   createDailyChart();
   styleHeaderRows();
 }
