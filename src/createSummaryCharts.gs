@@ -1,5 +1,4 @@
 function createSummaryCharts() {
-  // 並列実行防止（最重要）
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(30000)) {
     Logger.log("ロック取得できず → 他の実行が動いているのでスキップ");
@@ -16,25 +15,21 @@ function createSummaryCharts() {
         const props = PropertiesService.getScriptProperties();
         const lastCreatedDate = props.getProperty("lastChartDate");
 
-        // 今日すでに作成済みならスキップ
         if (lastCreatedDate === today) {
           Logger.log("本日のグラフはすでに作成済みです");
           return;
         }
 
-        // 古い summarySheet を削除して作り直す
         let summarySheet = ss.getSheetByName(summarySheetName);
         if (!summarySheet) {
           summarySheet = ss.insertSheet(summarySheetName);
         } else {
-          // 既存グラフを確実に削除
           summarySheet.getCharts().forEach(chart => {
             summarySheet.removeChart(chart);
           });
           summarySheet.clear();
         }
 
-        // スタイル初期化
         summarySheet.getRange(1, 1, 40, 10).setFontSize(13);
         for (let r = 1; r <= 40; r++) summarySheet.setRowHeight(r, 21);
 
@@ -49,7 +44,6 @@ function createSummaryCharts() {
         const startDate = Utilities.formatDate(sevenDaysAgo, "Asia/Tokyo", "yyyy-MM-dd");
         const endDate = Utilities.formatDate(now, "Asia/Tokyo", "yyyy-MM-dd");
 
-        // 同名の一時シートが残っていたら事前に削除
         let tempSheet = ss.getSheetByName("tempData");
         if (tempSheet) {
           ss.deleteSheet(tempSheet);
@@ -63,7 +57,6 @@ function createSummaryCharts() {
         tickers.forEach((ticker) => {
           tempSheet.clear();
 
-          // GOOGLEFINANCE で7日間のデータ取得
           tempSheet.getRange(1, 1).setFormula(
             `=GOOGLEFINANCE("${ticker}", "price", DATEVALUE("${startDate}"), DATEVALUE("${endDate}"))`
           );
@@ -75,7 +68,6 @@ function createSummaryCharts() {
 
           const rows = data.slice(1);
 
-          // 日付列（最初の1回だけ）
           if (dates.length === 0) {
             dates = rows.map(row => [row[0]]);
             summarySheet.getRange(1, 1).setValue("日付");
@@ -88,10 +80,8 @@ function createSummaryCharts() {
           basePrices[ticker] = prices[0][0];
         });
 
-        // 一時シート削除
         try { ss.deleteSheet(tempSheet); } catch (e) {}
 
-        // データ書き込み & 色付け & グラフ作成
         tickers.forEach((ticker, i) => {
           const col = i + 2;
           const prices = priceMap[ticker];
@@ -102,7 +92,6 @@ function createSummaryCharts() {
           summarySheet.getRange(1, col).setValue(ticker);
           summarySheet.getRange(2, col, prices.length).setValues(prices);
 
-          // 色付け
           const bgColors = prices.map((p, idx) => {
             const value = p[0];
             if (typeof value !== "number") return ["#eeeeee"];
@@ -118,7 +107,6 @@ function createSummaryCharts() {
 
           summarySheet.getRange(2, col, prices.length).setBackgrounds(bgColors);
 
-          // グラフ作成
           const chartBuilder = summarySheet.newChart();
           chartBuilder.addRange(summarySheet.getRange(1, 1, prices.length + 1, 1));
           chartBuilder.addRange(summarySheet.getRange(1, col, prices.length + 1, 1));
@@ -143,13 +131,10 @@ function createSummaryCharts() {
           summarySheet.insertChart(chartBuilder.build());
         });
 
-        // 今日作成した記録
         props.setProperty("lastChartDate", today);
-
-        break; // 成功したらループを抜ける
+        break;
 
       } catch (e) {
-        // リトライ前に残った tempData シートを掃除
         const oldTemp = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("tempData");
         if (oldTemp) {
           try { SpreadsheetApp.getActiveSpreadsheet().deleteSheet(oldTemp); } catch (err) {}
@@ -157,7 +142,7 @@ function createSummaryCharts() {
 
         Logger.log(`createSummaryCharts 試行 ${attempt}/${maxRetries} でエラー: ${e.message}`);
         if (attempt === maxRetries) throw e;
-        Utilities.sleep(3000);
+        Utilities.sleep(2000);
       }
     }
   } finally {
