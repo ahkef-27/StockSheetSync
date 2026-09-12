@@ -35,7 +35,7 @@ StockSheetSync は、Google Apps Script のトリガーを利用して
 
 現在、このスプレッドシートで動作を確認できます：
 
-https://docs.google.com/spreadsheets/d/1EK1zL5p-PEuFRml_fOhKIDMu2qOFJ0JgYKYVibOOoa8/edit?gid=793241765#gid=793241765
+https://docs.google.com/spreadsheets/d/1A2cOT2VnGv3S237l3JD2aySj6smmsdpn1fyDlL8ZHBY/edit?gid=0#gid=0
 
 ---
 
