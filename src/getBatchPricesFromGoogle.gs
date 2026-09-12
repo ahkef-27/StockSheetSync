@@ -1,6 +1,3 @@
-/**
- * 複数銘柄の価格を一括取得する関数
- */
 function getBatchPricesFromGoogle(sheet, symbols) {
   const startCol = 26; // Z列から横に展開
   const formulas = symbols.map(s => [`=GOOGLEFINANCE("${s}", "price")`]);
