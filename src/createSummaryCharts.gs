@@ -46,7 +46,7 @@ function createSummaryCharts() {
 
         let tempSheet = ss.getSheetByName("tempData");
         if (tempSheet) {
-          ss.deleteSheet(tempSheet);
+          try { ss.deleteSheet(tempSheet); } catch (e) {}
         }
         tempSheet = ss.insertSheet("tempData");
 
@@ -54,6 +54,7 @@ function createSummaryCharts() {
         let priceMap = {};
         let basePrices = {};
 
+        // 1. 各銘柄のデータを取得して一時格納
         tickers.forEach((ticker) => {
           tempSheet.clear();
 
@@ -68,11 +69,9 @@ function createSummaryCharts() {
 
           const rows = data.slice(1);
 
+          // 最初に取得できた日付データを保持（全銘柄共通）
           if (dates.length === 0) {
             dates = rows.map(row => [row[0]]);
-            summarySheet.getRange(1, 1).setValue("日付");
-            summarySheet.getRange(2, 1, dates.length).setValues(dates);
-            summarySheet.getRange(2, 1, dates.length).setNumberFormat("yyyy-MM-dd");
           }
 
           const prices = rows.map(row => [row[1]]);
@@ -80,18 +79,33 @@ function createSummaryCharts() {
           basePrices[ticker] = prices[0][0];
         });
 
+        // 作業用シートの削除
         try { ss.deleteSheet(tempSheet); } catch (e) {}
 
+        // データが取得できなかった場合はスキップ
+        if (dates.length === 0) {
+          Logger.log("株価データの取得に失敗しました");
+          return;
+        }
+
+        // 2. 先に A列に「日付」をまとめて出力
+        summarySheet.getRange(1, 1).setValue("日付");
+        summarySheet.getRange(2, 1, dates.length).setValues(dates);
+        summarySheet.getRange(2, 1, dates.length).setNumberFormat("yyyy-MM-dd");
+
+        // 3. 各銘柄の株価・背景色・グラフを B列、C列、D列 へ順番に出力
         tickers.forEach((ticker, i) => {
-          const col = i + 2;
+          const col = i + 2; // B列 = 2, C列 = 3, D列 = 4
           const prices = priceMap[ticker];
           const base = basePrices[ticker];
 
           if (!prices || prices.length === 0) return;
 
+          // ヘッダーと株価データの書き込み
           summarySheet.getRange(1, col).setValue(ticker);
           summarySheet.getRange(2, col, prices.length).setValues(prices);
 
+          // 背景色の設定
           const bgColors = prices.map((p, idx) => {
             const value = p[0];
             if (typeof value !== "number") return ["#eeeeee"];
@@ -107,9 +121,10 @@ function createSummaryCharts() {
 
           summarySheet.getRange(2, col, prices.length).setBackgrounds(bgColors);
 
+          // グラフの作成
           const chartBuilder = summarySheet.newChart();
-          chartBuilder.addRange(summarySheet.getRange(1, 1, prices.length + 1, 1));
-          chartBuilder.addRange(summarySheet.getRange(1, col, prices.length + 1, 1));
+          chartBuilder.addRange(summarySheet.getRange(1, 1, prices.length + 1, 1)); // A列（日付）
+          chartBuilder.addRange(summarySheet.getRange(1, col, prices.length + 1, 1)); // 該当銘柄列
           chartBuilder.setChartType(Charts.ChartType.LINE);
           chartBuilder.setOption("title", `${ticker} 過去7日間の株価`);
           chartBuilder.setOption("legend", { position: "none" });
