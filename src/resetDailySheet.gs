@@ -9,6 +9,6 @@ function resetDailySheet() {
   }
 
   sheet.getRange(1, 1, 1, 4).setValues([
-    ["時刻", "AAPL", "MSFT", "GOOGL"]
+    ["時刻", "AAPL", "META", "GOOGL"]
   ]);
 }
