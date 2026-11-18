@@ -63,7 +63,8 @@ function createDailyChart() {
     } catch (e) {
       Logger.log(`createDailyChart 試行 ${attempt}/${maxRetries} でエラー: ${e.message}`);
       if (attempt === maxRetries) throw e;
-      Utilities.sleep(2000);
+      Utilities.sleep(attempt * 5000);
     }
   }
 }
+
