@@ -157,7 +157,7 @@ function createSummaryCharts() {
 
         Logger.log(`createSummaryCharts 試行 ${attempt}/${maxRetries} でエラー: ${e.message}`);
         if (attempt === maxRetries) throw e;
-        Utilities.sleep(2000);
+        Utilities.sleep(attempt * 5000);
       }
     }
   } finally {
