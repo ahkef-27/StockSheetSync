@@ -7,15 +7,15 @@ function getBatchPricesFromGoogle(sheet, symbols) {
   
   SpreadsheetApp.flush();
   
-  // 最初は少し長め（2秒）待ってからチェック（サーバー負荷軽減のため間隔を2秒に変更）
-  Utilities.sleep(2000);
+  // 最初は少し長め（5秒）待ってからチェック（サーバー負荷軽減のため間隔を5秒に変更）
+  Utilities.sleep(5000);
 
   let values = [];
   for (let i = 0; i < 5; i++) {
     values = targetRange.getValues()[0];
     const isAllReady = values.every(v => typeof v === 'number' && !isNaN(v));
     if (isAllReady) break;
-    Utilities.sleep(2000); // 2秒待機
+    Utilities.sleep(3000); // 3秒待機
   }
 
   // 作業用セルのクリア
