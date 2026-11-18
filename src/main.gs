@@ -59,7 +59,7 @@ function fetchDailyStockPrices() {
         // 3回失敗した場合のみ例外を投げて通知する
         throw e;
       }
-      Utilities.sleep(3000); // 3秒待機して再試行
+      Utilities.sleep(attempt * 5000); // 3秒待機して再試行
     }
   }
 }
